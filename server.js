@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const { storeValueWithTimestamp } = require('./database');
-const {graphformatdata,getlatestactivity} = require('./graph')
+const {graphformatdata, getlatestactivity, old_graph_data} = require('./graph')
 const path = require('path');
 var cors = require("cors");
 
@@ -41,13 +41,8 @@ app.get('/latest_activity',async(req,res)=>{
 app.get('/updatesensor', async (req, res) => {
     res.send("Recieved Data")
     const {distance}=req.query
-    // if (distance!==undefined){
     console.log(`The recieved distance was: ${distance}`)
     await storeValueWithTimestamp(distance)
-    //     res.status(200)
-    // }else{
-    //     res.status(400)
-    // }
 });
 
 

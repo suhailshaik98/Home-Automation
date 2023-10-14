@@ -55,6 +55,46 @@ async function graphformatdata(){
     }
 }
 
+async function old_graph_data(date){
+    try{
+        const client = await MongoClient.connect(url,{})
+        console.log("Connected to database")
+        const db = client.db(dbname)
+        const [year, month, day] = date
+        const get_date = new Date(year, month - 1, day)
+        const end_day = new Date (year, month - 1 ,day)
+        // get_date.setHours(0, 0, 0, 0)
+        end_day.setHours(23, 59, 59, 0)
 
+        console.log(end_day)
+
+        const result = await db.collection('sensorvalues').find(
+           {
+            timestamp : {
+                $gte: get_date,
+                $lte: end_day
+            }
+           } 
+        )
+
+        const answer =  await result.toArray()
+        // console.log(answer)
+        await client.close()
+        // return answer
+    } catch (err) {
+        console.error(err)
+    }
+}
   
 module.exports={graphformatdata}  
+async function main() {
+    const date = [2023, 10, 13]; // Example date
+    try {
+        const sensorData = await old_graph_data(date);
+        console.log(sensorData);
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+}
+
+main(); // Call the main function to start the process.

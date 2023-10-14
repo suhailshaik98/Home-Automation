@@ -79,7 +79,60 @@ async function getlatestactivity(){
     }
 }
 
-  
-module.exports={graphformatdata,getlatestactivity}  
+async function old_graph_data(date){
+    try{
+        const client = await MongoClient.connect(url,{})
+        console.log("Connected to database")
+        const db = client.db(dbname)
+        const [year, month, day] = date
+        const get_date = new Date(year, month - 1, day)
+        const end_day = new Date (year, month - 1 ,day)
+        get_date.setHours(0, 0, 0, 0)
+        end_day.setHours(23, 59, 59, 0)
 
-getlatestactivity()
+        console.log(end_day)
+
+        const result = await db.collection('sensorvalues').find(
+           {
+            timestamp : {
+                $gte: get_date,
+                $lte: end_day
+            }
+           } 
+        )
+
+        const answer =  await result.toArray()
+        // console.log(answer)
+        await client.close()
+        const hours_data={}
+        for (const document of answer){
+            const time=document.timestamp
+            const get_hours=time.getUTCHours()
+            // console.log(get_hours)
+
+            if (hours_data[get_hours]){
+                hours_data[get_hours]++
+            }else{
+                hours_data[get_hours]=1
+            }
+        }
+        // console.log(hours_data)
+        const graph_data=[]
+        for (let hr=0; hr<24 ; hr++){
+            graph_data.push({
+                hour:hr,
+                count: hours_data[hr.toString()] || 0
+            })
+        }
+        console.log(graph_data)        
+
+        return graph_data
+    } catch (err) {
+        console.error(err)
+    }
+}
+  
+module.exports={graphformatdata, getlatestactivity, old_graph_data}  
+
+// getlatestactivity()
+old_graph_data([2023,9,12])

@@ -7,6 +7,7 @@ import { Card, CardContent, Typography } from '@mui/material';
 import CardBody from 'react-bootstrap/esm/CardBody';
 import Grid from '@mui/material/Grid'
 import { ToDo } from './components/ToDo';
+import {CalenderAct} from './components/calender'
 // import Item from '@mui/material/Item'// import Getdata from 'components/graph'
 // const {graphdata} = require('./Graph')
 
@@ -33,7 +34,7 @@ function App() {
         <Card>
           <CardContent>
             <Typography variant="body2" color="text.secondary">
-              Card 3
+              <CalenderAct/>
             </Typography>
           </CardContent>
         </Card>

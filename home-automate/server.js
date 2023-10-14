@@ -26,17 +26,16 @@ app.get('/count_graph', async (req, res) => {
     }
 });
 
+app.get('/old_graph',async(req,res) => {
+    const {data} = req.query
+})
+
 app.get('/updatesensor', async (req, res) => {
     res.send("Recieved Data")
     const {distance}=req.query
-    // if (distance!==undefined){
     console.log(`The recieved distance was: ${distance}`)
     await storeValueWithTimestamp(distance)
-    //     res.status(200)
-    // }else{
-    //     res.status(400)
-    // }
-});
+})
 
 
 app.listen(port, () => {
