@@ -4,10 +4,7 @@ const dbname='distancesensor'
 
 async function graphformatdata(){
     try{
-        const client = await MongoClient.connect(url,{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const client = await MongoClient.connect(url,{});
         console.log('Connected successfully to server');
         const db=client.db(dbname);
         // Get present time

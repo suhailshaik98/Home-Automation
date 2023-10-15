@@ -18,9 +18,20 @@ app.get('/', (req, res) => {
 
 app.get('/count_graph', async (req, res) => {
     try{
-        const data=await graphformatdata();
-        console.log(data)
-        res.send(data)
+        const {date} = req.query
+        if (date == null){
+            const data=await graphformatdata();
+            res.send(data)
+
+        }else{
+            // console.log(date)
+            const year = date.slice(0,4)
+            console.log(year)
+            const data=await graphformatdata()
+            res.send(data)
+
+        }
+        // console.log(data)
     }catch(err){
         console.error(err)
     }

@@ -1,19 +1,20 @@
 import './App.css';
 import {Getdata,Latestactivity} from './components/graph';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { Card, CardContent, Typography } from '@mui/material';
-import CardBody from 'react-bootstrap/esm/CardBody';
 import Grid from '@mui/material/Grid'
 import { ToDo } from './components/ToDo';
 import {CalenderAct} from './components/calender'
+import { useState } from 'react';
 // import Item from '@mui/material/Item'// import Getdata from 'components/graph'
 // const {graphdata} = require('./Graph')
 
 
 
 function App() {
+  const [selectedDate,setSelectedDate] =  useState((new Date()))
+  const handleDateChange = (newValue) =>{
+    setSelectedDate(newValue)
+  }
   return (
     <>
     <h1>Welcome to 84 Minnesota</h1>
@@ -26,17 +27,14 @@ function App() {
             <Typography variant="body2" color="text.secondary">
               Activity Graph
             </Typography>
-            <Getdata/>
+            <Getdata selectedDate = {selectedDate}/>
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={6}>
         <Card>
-          <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              <CalenderAct/>
-            </Typography>
-          </CardContent>
+              <CalenderAct selectedDate={selectedDate} onDateChange={handleDateChange}/>
+              {console.log(selectedDate)}
         </Card>
       </Grid>
       <Grid item xs={6}>
@@ -53,9 +51,7 @@ function App() {
       <Grid item xs={6}>
         <Card>
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
               <ToDo />
-            </Typography>
           </CardContent>
         </Card>
       </Grid>
