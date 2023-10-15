@@ -1,0 +1,12 @@
+.input-wrapper{
+    .input{
+        margin-right: 10px;
+        height: 35px;
+        border: 1px solid gray;
+        border-radius: 6px;
+    }
+}
+.add-button{
+    padding: 5px;
+    width: auto;
+}

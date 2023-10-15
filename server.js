@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const { storeValueWithTimestamp } = require('./database');
-const {graphformatdata,getlatestactivity} = require('./graph')
+const {graphformatdata, getlatestactivity, old_graph_data} = require('./graph')
 const path = require('path');
 var cors = require("cors");
 
@@ -20,9 +20,23 @@ app.get('/', (req, res) => {
 
 app.get('/count_graph', async (req, res) => {
     try{
-        const data=await graphformatdata();
-        console.log(data)
-        res.send(data)
+        const {date} = req.query
+        if (date == null){
+            const data=await graphformatdata();
+            res.send(data)
+        }else{
+            console.log(date)
+            const year = date.slice(0,4)
+            const month = date.slice(5,7)
+            const day =  date.slice(8,10)
+            console.log("This is the year " , year)
+            console.log("This is the month ",month)
+            console.log("This is the day ",day)
+            const data=await old_graph_data([year,month,day])
+            res.send(data)
+        }
+        // console.log(data)
+        
     }catch(err){
         console.error(err)
     }
@@ -31,7 +45,7 @@ app.get('/count_graph', async (req, res) => {
 app.get('/latest_activity',async(req,res)=>{
     try{
         const data=await getlatestactivity();
-        console.log(data)
+        // console.log(data)
         res.send(data)
     }catch(err){
         console.error(err)
@@ -41,13 +55,8 @@ app.get('/latest_activity',async(req,res)=>{
 app.get('/updatesensor', async (req, res) => {
     res.send("Recieved Data")
     const {distance}=req.query
-    // if (distance!==undefined){
     console.log(`The recieved distance was: ${distance}`)
     await storeValueWithTimestamp(distance)
-    //     res.status(200)
-    // }else{
-    //     res.status(400)
-    // }
 });
 
 

@@ -41,13 +41,13 @@ export function Latestactivity(){
         )
 }
 
-export function Getdata(){
+export function Getdata({selectedDate}){
     const [isLoading,setIsLoading]=useState(true)
     const [loadeddata,setloadeddata]=useState([])
-
+    console.log(selectedDate)
     useEffect(()=>{
         setIsLoading(true)
-        fetch("http://192.168.1.253:3000/count_graph")
+        fetch(`http://192.168.1.253:3000/count_graph?date=${selectedDate.toISOString()}`)
         .then((response)=>{
             return response.json()
         })
@@ -76,7 +76,8 @@ export function Getdata(){
             setloadeddata(array)
         })
 
-    },[])
+    },[selectedDate])
+    
     
 
     if (isLoading){
@@ -86,23 +87,40 @@ export function Getdata(){
         labels: loadeddata.map((item) => item.hours),
         datasets: [
           {
-            label: 'No of times the alarm triggered',
+            label: `No of times the alarm triggered on ${selectedDate.toString().slice(0,10)}`,
             data: loadeddata.map((item) => item.count),
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
+            xLabel: "Time in hours"
           },
         ],
       };
-    
+      const options = {
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Hours', // X-axis label
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Number of Alarm Triggers', // Y-axis label
+            },
+          },
+        },
+      };
     return (
-        // <ResponsiveContainer width="100%" height="100%">
-        //   <BarChart width={150} height={40} data={loadeddata}>
-        //     <Bar dataKey="uv" fill="#8884d8" />
-        //   </BarChart>
-        // </ResponsiveContainer>
-        <Bar data={data}/>
+        <Bar data={data} options={options}/>
       );
   }
+
+
+
+export function Oldgetdata(){
+    return <p>Loading...</p>
+}
 
 //   export default Getdata;
