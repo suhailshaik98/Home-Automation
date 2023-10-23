@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const { storeValueWithTimestamp } = require('./database');
+const {storeValueWithTimestamp } = require('./database');
 const {graphformatdata, getlatestactivity, old_graph_data} = require('./graph')
+const {parseDatetimeAndRunPython} =  require('./node_ml_algo')
 const path = require('path');
 var cors = require("cors");
-
 app.use(express.static('public'));
 
 const htmlFilePath = path.join(__dirname, '/public');
@@ -57,6 +57,7 @@ app.get('/updatesensor', async (req, res) => {
     const {distance}=req.query
     console.log(`The recieved distance was: ${distance}`)
     await storeValueWithTimestamp(distance)
+    await parseDatetimeAndRunPython(distance)
 });
 
 
