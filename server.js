@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const {storeValueWithTimestamp } = require('./database');
-const {graphformatdata, getlatestactivity, old_graph_data} = require('./graph')
+const {suspicious_act,graphformatdata, getlatestactivity, old_graph_data} = require('./graph')
 const {parseDatetimeAndRunPython} =  require('./node_ml_algo')
 const path = require('path');
 var cors = require("cors");
@@ -47,6 +47,17 @@ app.get('/latest_activity',async(req,res)=>{
         const data=await getlatestactivity();
         // console.log(data)
         res.send(data)
+    }catch(err){
+        console.error(err)
+    }
+})
+
+
+app.get('/suspicious_act',async(req,res) => {
+    try{
+        const data =  await suspicious_act();
+        res.send(data)
+        console.log("this suspisious get triggered")
     }catch(err){
         console.error(err)
     }

@@ -1,5 +1,5 @@
 import './App.css';
-import {Getdata,Latestactivity} from './components/graph';
+import {Getdata,Latestactivity,Suspicious} from './components/graph';
 import { Card, CardContent, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid'
 import { ToDo } from './components/ToDo';
@@ -43,6 +43,7 @@ function App() {
             <Typography variant="body2" color="text.secondary">
               Last Observed Activity
             </Typography>
+              <Suspicious/>
             <Latestactivity/>
           </CardContent>
         </Card>

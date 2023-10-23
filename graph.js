@@ -128,8 +128,21 @@ async function old_graph_data(date){
         console.error(err)
     }
 }
+
+async function suspicious_act(){
+    try{
+        const client = await MongoClient.connect(url,{})
+        const db = client.db(dbname)
+        const result = await db.collection('suspicious_activity').find().sort({['timestamp']:-1}).limit(1).toArray()
+        console.log(result)
+        await client.close()
+        return result
+    }catch(error){
+        console.error(error)
+    }
+}
   
-module.exports={graphformatdata, getlatestactivity, old_graph_data}  
+module.exports={suspicious_act,graphformatdata, getlatestactivity, old_graph_data}  
 
 // getlatestactivity()
-old_graph_data([2023,9,12])
+// old_graph_data([2023,9,12])

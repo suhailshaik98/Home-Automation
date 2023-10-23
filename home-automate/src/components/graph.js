@@ -5,6 +5,37 @@ import Chart from 'chart.js/auto';
 // import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { VictoryBar, VictoryChart } from 'victory';
 
+export function Suspicious(){
+  const [waitingfordata,booleanvaluefordataarrival] =  useState(true)
+  const [datareached,storethedatainthis] =  useState([])
+  useEffect(()=>{
+    booleanvaluefordataarrival(true);
+    fetch("http://192.168.1.253:3000/suspicious_act")
+    .then((response)=>{
+        return response.json()
+    })
+    .then((data)=>{
+        // return data
+        const helper=[]
+        console.log(data)
+        for (const key in data){
+            const object={
+                hour: data[key].hour
+            }
+            helper.push(object)
+        }
+        // console.log(helper)
+        console.log(helper[0].hour)
+        booleanvaluefordataarrival(false)
+        storethedatainthis(helper)
+    })
+
+},[])
+  if (waitingfordata){
+    return <p>Loading ...</p>
+  }
+  return <p>Some suspicious activity was detected around this hour {datareached[0].hour}</p>
+}
 
 export function Latestactivity(){
         // Graph code
@@ -26,8 +57,8 @@ export function Latestactivity(){
                     }
                     helper.push(object)
                 }
-                console.log(helper)
-                console.log(helper[0].timestamp)
+                // console.log(helper)
+                // console.log(helper[0].timestamp)
                 abhidataayanikabooleanfxn(false)
                 somestupiddatafxn(helper)
             })
